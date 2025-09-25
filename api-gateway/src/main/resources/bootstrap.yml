@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: api-gateway   # must match filename in config-repo
+
+  cloud:
+    config:
+      uri: http://localhost:8888   # URL of your config-server
+      fail-fast: true
+      retry:
+        initial-interval: 1000
+        max-attempts: 6
+        max-interval: 2000
+        multiplier: 1.1
+    compatibility-verifier:
+      enabled: false
