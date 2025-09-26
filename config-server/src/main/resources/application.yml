@@ -1,0 +1,15 @@
+server:
+  port: 8888   # standard port for config server
+
+spring:
+  application:
+    name: config-server
+
+  profiles:
+    active: native   # merged here ✅
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///D:/ConfigAssets/config-repo

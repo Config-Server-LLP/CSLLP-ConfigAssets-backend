@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # User Service
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+
+        # Asset Service
+        - id: asset-service
+          uri: lb://asset-service
+          predicates:
+            - Path=/api/assets/**
+          filters:
+            - StripPrefix=1
+
+        # Asset Assignment Service - Assignments
+        - id: assetassignment-service-assignments
+          uri: lb://assetassignment-service
+          predicates:
+            - Path=/api/assignments/**
+          filters:
+            - StripPrefix=1
+
+        # Asset Assignment Service - Requests
+        - id: assetassignment-service-requests
+          uri: lb://assetassignment-service
+          predicates:
+            - Path=/api/requests/**
+          filters:
+            - StripPrefix=1
+
+        # Audit Reporting Service - Reports
+        - id: auditreporting-service-reports
+          uri: lb://auditreporting-service
+          predicates:
+            - Path=/api/reports/**
+          filters:
+            - StripPrefix=1
+
+        # Audit Reporting Service - Audit Logs
+        - id: auditreporting-service-auditlogs
+          uri: lb://auditreporting-service
+          predicates:
+            - Path=/api/audit/**
+          filters:
+            - StripPrefix=1
+
+        # Notification Service
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - StripPrefix=1
+
+  # ✅ Keycloak OAuth2 Configuration
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: api-gateway
+            client-secret: BHIzMLGMcG3TFSFDOfOFjWU7xa3z70jc
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/ConfigAssets
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/ConfigAssets
+
+server:
+  port: 8081
+
+# Eureka configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
