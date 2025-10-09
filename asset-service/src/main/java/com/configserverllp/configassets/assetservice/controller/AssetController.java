@@ -26,6 +26,12 @@ public class AssetController {
         this.assetService = assetService;
     }
 
+    // ================= HEALTH CHECK =================
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Asset service is running!");
+    }
+
     // ================= CREATE =================
     @PostMapping
     public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDTO) {

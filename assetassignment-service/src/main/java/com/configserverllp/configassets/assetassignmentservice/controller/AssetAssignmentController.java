@@ -21,6 +21,12 @@ public class AssetAssignmentController {
         this.assignmentService = assignmentService;
     }
 
+    // ================= HEALTH CHECK =================
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Asset Assignment service is running!");
+    }
+
     @PostMapping
     public ResponseEntity<AssetAssignmentDTO> createAssignment(@RequestBody AssetAssignmentDTO assignmentDTO) {
         logger.info("Creating new assignment for userId: {}", assignmentDTO.getUserId());

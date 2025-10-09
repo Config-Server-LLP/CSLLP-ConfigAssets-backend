@@ -31,6 +31,10 @@ public class ReportServiceImpl implements ReportService {
     public ReportDTO generateReport(ReportDTO reportDTO) {
         try {
             Report report = reportMapper.toEntity(reportDTO);
+            // Ensure required fields
+            if (report.getGeneratedAt() == null) {
+                report.setGeneratedAt(java.time.LocalDateTime.now());
+            }
             Report saved = reportRepository.save(report);
             return reportMapper.toDTO(saved);
         } catch (Exception e) {

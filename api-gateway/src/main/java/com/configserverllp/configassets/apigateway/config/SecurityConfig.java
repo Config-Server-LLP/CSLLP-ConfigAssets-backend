@@ -19,24 +19,23 @@ public class SecurityConfig {
 
                 // Authorize routes
                 .authorizeExchange(exchange -> exchange
-                        // Public endpoints
+                        // Allow all API routes for testing (no authentication required)
+                        .pathMatchers("/api/**").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/login/**", "/oauth2/**").permitAll()
-                        // Protect all API routes (require authentication)
-                        .pathMatchers("/api/**").authenticated()
-                        // Deny everything else
-                        .anyExchange().denyAll()
-                )
-
-                // ✅ Keycloak OAuth2 Configuration (new style)
-                .oauth2Login(oauth2 -> { })   // no redirect config in WebFlux
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(
-                                        new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter())
-                                )
-                        )
+                        // Allow everything else
+                        .anyExchange().permitAll()
                 );
+
+                // Disable OAuth2 for testing
+                // .oauth2Login(oauth2 -> { })
+                // .oauth2ResourceServer(oauth2 -> oauth2
+                //         .jwt(jwt -> jwt
+                //                 .jwtAuthenticationConverter(
+                //                         new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter())
+                //                 )
+                //         )
+                // );
 
         return http.build();
     }

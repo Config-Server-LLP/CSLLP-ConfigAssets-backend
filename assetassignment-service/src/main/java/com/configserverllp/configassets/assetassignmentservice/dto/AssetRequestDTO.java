@@ -12,6 +12,9 @@ public class AssetRequestDTO {
     private String reason;
     private String priority;
     private RequestStatus status;
+    private String approvedBy;
+    private LocalDateTime approvedDate;
+    private String rejectionReason;
 
     @Override
     public String toString() {
@@ -117,10 +120,4 @@ public class AssetRequestDTO {
     public void setRejectionReason(String rejectionReason) {
         this.rejectionReason = rejectionReason;
     }
-
-    private String approvedBy;
-    private LocalDateTime approvedDate;
-    private String rejectionReason;
-
-    // Getters & Setters
 }

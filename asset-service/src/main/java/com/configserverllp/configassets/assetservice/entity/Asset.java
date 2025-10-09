@@ -19,7 +19,7 @@ public class Asset {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String assetId; // Unique asset identifier
+    private Long assetId; // Unique asset identifier
 
     @Column(nullable = false)
     private String name;
@@ -54,7 +54,7 @@ public class Asset {
 
     // Auditing fields
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -71,7 +71,7 @@ public class Asset {
     public Asset() {
     }
 
-    public Asset(Long id, String assetId, String name, String category, String subCategory, String brand,
+    public Asset(Long id, Long assetId, String name, String category, String subCategory, String brand,
                  String model, String serialNumber, String description, AssetStatus status, BigDecimal purchasePrice,
                  LocalDate purchaseDate, LocalDate warrantyExpiry, String location, String notes,
                  LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy, String updatedBy) {
@@ -100,8 +100,8 @@ public class Asset {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getAssetId() { return assetId; }
-    public void setAssetId(String assetId) { this.assetId = assetId; }
+    public Long getAssetId() { return assetId; }
+    public void setAssetId(Long assetId) { this.assetId = assetId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

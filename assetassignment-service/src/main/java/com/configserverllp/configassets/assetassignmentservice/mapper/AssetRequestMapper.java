@@ -26,7 +26,15 @@ public class AssetRequestMapper {
     public static AssetRequest toEntity(AssetRequestDTO dto) {
         AssetRequest request = new AssetRequest();
         request.setId(dto.getId());
-        // Set Asset and User in service layer using Feign clients
+        
+        // CRITICAL FIX: Map requestedById to requestedByUserId
+        request.setRequestedByUserId(dto.getRequestedById());
+        
+        // Set optional asset ID
+        if (dto.getAssetId() != null) {
+            request.setAssetId(dto.getAssetId());
+        }
+        
         request.setRequestType(dto.getRequestType());
         request.setCategory(dto.getCategory());
         request.setReason(dto.getReason());

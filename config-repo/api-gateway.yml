@@ -11,7 +11,7 @@ spring:
           predicates:
             - Path=/api/users/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/users/(?<segment>.*), /api/users/$\{segment}
 
         # Asset Service
         - id: asset-service
@@ -19,7 +19,7 @@ spring:
           predicates:
             - Path=/api/assets/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/assets/(?<segment>.*), /api/assets/$\{segment}
 
         # Asset Assignment Service - Assignments
         - id: assetassignment-service-assignments
@@ -27,7 +27,7 @@ spring:
           predicates:
             - Path=/api/assignments/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/assignments/(?<segment>.*), /api/assignments/$\{segment}
 
         # Asset Assignment Service - Requests
         - id: assetassignment-service-requests
@@ -35,7 +35,7 @@ spring:
           predicates:
             - Path=/api/requests/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/requests/(?<segment>.*), /api/requests/$\{segment}
 
         # Audit Reporting Service - Reports
         - id: auditreporting-service-reports
@@ -43,7 +43,7 @@ spring:
           predicates:
             - Path=/api/reports/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/reports/(?<segment>.*), /api/reports/$\{segment}
 
         # Audit Reporting Service - Audit Logs
         - id: auditreporting-service-auditlogs
@@ -51,7 +51,7 @@ spring:
           predicates:
             - Path=/api/audit/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/audit/(?<segment>.*), /api/audit/$\{segment}
 
         # Notification Service
         - id: notification-service
@@ -59,7 +59,7 @@ spring:
           predicates:
             - Path=/api/notifications/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/api/notifications/(?<segment>.*), /api/notifications/$\{segment}
 
   # ✅ Keycloak OAuth2 Configuration
   security:

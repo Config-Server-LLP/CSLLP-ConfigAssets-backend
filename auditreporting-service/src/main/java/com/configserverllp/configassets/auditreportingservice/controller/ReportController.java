@@ -17,6 +17,12 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    // ================= HEALTH CHECK =================
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Audit Reporting service is running!");
+    }
+
     @PostMapping("/generate")
     public ResponseEntity<ReportDTO> generateReport(@RequestBody ReportDTO reportDTO) {
         return ResponseEntity.ok(reportService.generateReport(reportDTO));

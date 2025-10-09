@@ -38,7 +38,7 @@ public class User {
 
     // Auditing fields
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate

@@ -21,7 +21,10 @@ public class AssetAssignmentMapper {
     public static AssetAssignment toEntity(AssetAssignmentDTO dto) {
         AssetAssignment assignment = new AssetAssignment();
         assignment.setId(dto.getId());
-        // Set Asset and User objects in service layer using Feign clients
+        // Map required identifiers
+        assignment.setAssetId(dto.getAssetId());
+        assignment.setUserId(dto.getUserId());
+        // Set other fields
         assignment.setAssignedDate(dto.getAssignedDate());
         assignment.setReturnDate(dto.getReturnDate());
         assignment.setStatus(dto.getStatus());

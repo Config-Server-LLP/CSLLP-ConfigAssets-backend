@@ -24,6 +24,12 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
+    // ================= HEALTH CHECK =================
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Notification service is running!");
+    }
+
     // ================= CREATE =================
     @PostMapping
     public ResponseEntity<NotificationDTO> createNotification(@RequestBody NotificationDTO notificationDTO) {

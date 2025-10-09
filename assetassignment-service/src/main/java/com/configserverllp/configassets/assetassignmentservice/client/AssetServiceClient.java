@@ -15,7 +15,7 @@ public interface AssetServiceClient {
     AssetDTO getAssetById(@PathVariable Long id);
 
     @GetMapping("/api/assets/asset-id/{assetId}")
-    AssetDTO getAssetByAssetId(@PathVariable String assetId);
+    AssetDTO getAssetByAssetId(@PathVariable Long assetId);
 
     @GetMapping("/api/assets")
     List<AssetDTO> getAllAssets();
@@ -36,7 +36,7 @@ public interface AssetServiceClient {
 // AssetDTO class for FeignClient communication
 class AssetDTO {
     private Long id;
-    private String assetId;
+    private Long assetId;
     private String name;
     private String category;
     private String subCategory;
@@ -54,7 +54,7 @@ class AssetDTO {
     // Constructors
     public AssetDTO() {}
 
-    public AssetDTO(Long id, String assetId, String name, String category, String subCategory, 
+    public AssetDTO(Long id, Long assetId, String name, String category, String subCategory,
                    String brand, String model, String serialNumber, String description, String status,
                    String purchasePrice, String purchaseDate, String warrantyExpiry, String location, String notes) {
         this.id = id;
@@ -78,8 +78,8 @@ class AssetDTO {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getAssetId() { return assetId; }
-    public void setAssetId(String assetId) { this.assetId = assetId; }
+    public Long getAssetId() { return assetId; }
+    public void setAssetId(Long assetId) { this.assetId = assetId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

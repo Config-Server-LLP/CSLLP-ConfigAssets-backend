@@ -35,6 +35,23 @@ public class AssetServiceImpl implements AssetService {
     public AssetDTO createAsset(AssetDTO assetDTO) {
         try {
             logger.info("Creating asset with ID: {}", assetDTO.getAssetId());
+            
+            // Validate required fields
+            if (assetDTO.getAssetId() == null) {
+                throw new InvalidAssetDataException("Asset ID is required");
+            }
+            if (assetDTO.getName() == null || assetDTO.getName().trim().isEmpty()) {
+                throw new InvalidAssetDataException("Asset name is required");
+            }
+            if (assetDTO.getCategory() == null || assetDTO.getCategory().trim().isEmpty()) {
+                throw new InvalidAssetDataException("Asset category is required");
+            }
+            if (assetDTO.getBrand() == null || assetDTO.getBrand().trim().isEmpty()) {
+                throw new InvalidAssetDataException("Asset brand is required");
+            }
+            if (assetDTO.getStatus() == null) {
+                assetDTO.setStatus(AssetStatus.AVAILABLE);
+            }
 
             Optional<Asset> existing = assetRepository.findByAssetId(assetDTO.getAssetId());
             if (existing.isPresent()) {
@@ -42,6 +59,15 @@ public class AssetServiceImpl implements AssetService {
             }
 
             Asset asset = AssetMapper.toEntity(assetDTO);
+            
+            // Set auditing fields manually if needed
+            if (asset.getCreatedAt() == null) {
+                asset.setCreatedAt(java.time.LocalDateTime.now());
+            }
+            if (asset.getCreatedBy() == null) {
+                asset.setCreatedBy("system");
+            }
+            
             Asset saved = assetRepository.save(asset);
             return AssetMapper.toDTO(saved);
         } catch (DuplicateAssetException | InvalidAssetDataException e) {
@@ -49,7 +75,7 @@ public class AssetServiceImpl implements AssetService {
             throw e;
         } catch (Exception e) {
             logger.error("Unexpected error while creating asset", e);
-            throw new RuntimeException("Unexpected error while creating asset");
+            throw new RuntimeException("Unexpected error while creating asset: " + e.getMessage());
         }
     }
 
@@ -143,7 +169,13 @@ public class AssetServiceImpl implements AssetService {
     // ===== SEARCH =====
     @Override
     public List<AssetDTO> searchAssets(String query) {
-        return assetRepository.findByNameContainingIgnoreCaseOrAssetIdContainingIgnoreCase(query, query)
+        Long assetIdAsLong = null;
+        try {
+            assetIdAsLong = Long.parseLong(query);
+        } catch (NumberFormatException ignored) {
+        }
+
+        return assetRepository.findByNameContainingIgnoreCaseOrAssetId(query, assetIdAsLong)
                 .stream()
                 .map(AssetMapper::toDTO)
                 .collect(Collectors.toList());

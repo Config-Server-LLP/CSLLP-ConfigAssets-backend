@@ -30,10 +30,30 @@ public class AssetRequestServiceImpl implements AssetRequestService {
 
     @Override
     public AssetRequestDTO createRequest(AssetRequestDTO requestDTO) {
-        // TODO: Fetch User and optional Asset via Feign clients
+        // Validate required fields
+        if (requestDTO.getRequestedById() == null) {
+            throw new InvalidRequestException("Requested by user ID is required");
+        }
+        if (requestDTO.getRequestType() == null || requestDTO.getRequestType().trim().isEmpty()) {
+            throw new InvalidRequestException("Request type is required");
+        }
+        if (requestDTO.getCategory() == null || requestDTO.getCategory().trim().isEmpty()) {
+            throw new InvalidRequestException("Category is required");
+        }
+        if (requestDTO.getReason() == null || requestDTO.getReason().trim().isEmpty()) {
+            throw new InvalidRequestException("Reason is required");
+        }
+        
         AssetRequest request = AssetRequestMapper.toEntity(requestDTO);
-        request.setStatus(RequestStatus.PENDING);
+        
+        // Set default status if not provided
+        if (request.getStatus() == null) {
+            request.setStatus(RequestStatus.PENDING);
+        }
+        
+        // Set auditing fields manually
         request.setCreatedAt(LocalDateTime.now());
+        
         return AssetRequestMapper.toDTO(requestRepository.save(request));
     }
 

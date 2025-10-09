@@ -43,6 +43,12 @@ public class UserController {
         }
     }
 
+    // ================= HEALTH CHECK =================
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("User service is running!");
+    }
+
     // ================= READ =================
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {

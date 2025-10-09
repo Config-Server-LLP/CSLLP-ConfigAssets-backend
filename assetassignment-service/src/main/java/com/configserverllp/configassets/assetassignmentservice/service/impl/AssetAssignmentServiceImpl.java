@@ -4,8 +4,6 @@ import com.configserverllp.configassets.assetassignmentservice.dto.AssetAssignme
 import com.configserverllp.configassets.assetassignmentservice.entity.AssetAssignment;
 import com.configserverllp.configassets.assetassignmentservice.entity.AssignmentStatus;
 import com.configserverllp.configassets.assetassignmentservice.exception.AssignmentNotFoundException;
-import com.configserverllp.configassets.assetassignmentservice.exception.AssetNotFoundException;
-import com.configserverllp.configassets.assetassignmentservice.exception.UserNotFoundException;
 import com.configserverllp.configassets.assetassignmentservice.mapper.AssetAssignmentMapper;
 import com.configserverllp.configassets.assetassignmentservice.repository.AssetAssignmentRepository;
 import com.configserverllp.configassets.assetassignmentservice.service.AssetAssignmentService;
@@ -29,6 +27,13 @@ public class AssetAssignmentServiceImpl implements AssetAssignmentService {
 
     @Override
     public AssetAssignmentDTO createAssignment(AssetAssignmentDTO assignmentDTO) {
+        // Basic validation of required fields
+        if (assignmentDTO.getAssetId() == null) {
+            throw new IllegalArgumentException("Asset ID is required");
+        }
+        if (assignmentDTO.getUserId() == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
         // TODO: Fetch Asset and User via Feign clients
         AssetAssignment assignment = AssetAssignmentMapper.toEntity(assignmentDTO);
         assignment.setStatus(AssignmentStatus.ACTIVE);

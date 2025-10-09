@@ -2,6 +2,8 @@ package com.configserverllp.configassets.userservice.service.impl;
 
 import com.configserverllp.configassets.userservice.dto.UserDTO;
 import com.configserverllp.configassets.userservice.entity.User;
+import com.configserverllp.configassets.userservice.exception.DuplicateUserException;
+import com.configserverllp.configassets.userservice.exception.InvalidUserDataException;
 import com.configserverllp.configassets.userservice.exception.UserNotFoundException;
 import com.configserverllp.configassets.userservice.repository.UserRepository;
 import com.configserverllp.configassets.userservice.service.UserService;
@@ -30,13 +32,73 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDTO) {
         try {
             logger.info("Creating user with username: {}", userDTO.getUsername());
+            
+            // Validate required fields
+            validateUserData(userDTO);
+            
+            // Check for duplicates
+            if (userRepository.existsByUsername(userDTO.getUsername())) {
+                throw new DuplicateUserException("Username already exists: " + userDTO.getUsername());
+            }
+            
+            if (userRepository.existsByEmail(userDTO.getEmail())) {
+                throw new DuplicateUserException("Email already exists: " + userDTO.getEmail());
+            }
+            
             User user = UserMapper.toEntity(userDTO);
+            
+            // Set auditing fields manually if needed
+            if (user.getCreatedAt() == null) {
+                user.setCreatedAt(java.time.LocalDateTime.now());
+            }
+            if (user.getCreatedBy() == null) {
+                user.setCreatedBy("system");
+            }
+            
             User savedUser = userRepository.save(user);
             return UserMapper.toDTO(savedUser);
+        } catch (DuplicateUserException | InvalidUserDataException e) {
+            throw e; // Re-throw custom exceptions
         } catch (Exception e) {
             logger.error("Error while creating user: {}", e.getMessage(), e);
-            throw e; // handled by global handler
+            throw new InvalidUserDataException("Failed to create user: " + e.getMessage());
         }
+    }
+    
+    private void validateUserData(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new InvalidUserDataException("User data cannot be null");
+        }
+        
+        if (userDTO.getUsername() == null || userDTO.getUsername().trim().isEmpty()) {
+            throw new InvalidUserDataException("Username is required");
+        }
+        
+        if (userDTO.getEmail() == null || userDTO.getEmail().trim().isEmpty()) {
+            throw new InvalidUserDataException("Email is required");
+        }
+        
+        // Basic email format validation
+        if (!isValidEmail(userDTO.getEmail())) {
+            throw new InvalidUserDataException("Invalid email format");
+        }
+        
+        if (userDTO.getFirstName() == null || userDTO.getFirstName().trim().isEmpty()) {
+            throw new InvalidUserDataException("First name is required");
+        }
+        
+        if (userDTO.getRole() == null || userDTO.getRole().trim().isEmpty()) {
+            throw new InvalidUserDataException("Role is required");
+        }
+        
+        // Set default active status if not provided
+        if (userDTO.getActive() == null) {
+            userDTO.setActive(true);
+        }
+    }
+    
+    private boolean isValidEmail(String email) {
+        return email != null && email.contains("@") && email.contains(".");
     }
 
     @Override

@@ -30,6 +30,12 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             Notification entity = NotificationMapper.toEntity(notificationDTO);
             entity.setCreatedAt(LocalDateTime.now());
+            if (entity.getScheduledAt() == null) {
+                entity.setScheduledAt(LocalDateTime.now());
+            }
+            if (entity.getStatus() == null) {
+                entity.setStatus(NotificationStatus.PENDING);
+            }
             Notification saved = repository.save(entity);
             return NotificationMapper.toDTO(saved);
         } catch (Exception e) {
@@ -81,6 +87,9 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             Notification entity = NotificationMapper.toEntity(templateDTO);
             entity.setCreatedAt(LocalDateTime.now());
+            if (entity.getScheduledAt() == null) {
+                entity.setScheduledAt(LocalDateTime.now());
+            }
             entity.setStatus(NotificationStatus.PENDING); // Template default
             Notification saved = repository.save(entity);
             return NotificationMapper.toDTO(saved);

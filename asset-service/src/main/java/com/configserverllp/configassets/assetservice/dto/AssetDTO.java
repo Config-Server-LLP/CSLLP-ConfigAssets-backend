@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class AssetDTO {
 
     private Long id;
-    private String assetId;
+    private Long assetId;
     private String name;
     private String category;
     private String subCategory;
@@ -33,7 +33,7 @@ public class AssetDTO {
     public AssetDTO() {
     }
 
-    public AssetDTO(Long id, String assetId, String name, String category, String subCategory, String brand,
+    public AssetDTO(Long id, Long assetId, String name, String category, String subCategory, String brand,
                     String model, String serialNumber, String description, AssetStatus status, BigDecimal purchasePrice,
                     LocalDate purchaseDate, LocalDate warrantyExpiry, String location, String notes,
                     LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy, String updatedBy) {
@@ -62,8 +62,8 @@ public class AssetDTO {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getAssetId() { return assetId; }
-    public void setAssetId(String assetId) { this.assetId = assetId; }
+    public Long getAssetId() { return assetId; }
+    public void setAssetId(Long assetId) { this.assetId = assetId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

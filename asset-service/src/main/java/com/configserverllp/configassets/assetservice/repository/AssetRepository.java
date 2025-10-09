@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, Long> {
 
-    Optional<Asset> findByAssetId(String assetId);
+    Optional<Asset> findByAssetId(Long assetId);
 
     List<Asset> findByCategory(String category);
 
@@ -28,7 +28,8 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
     List<Asset> findByStatus(AssetStatus... statuses);
 
     // Add missing methods
-    List<Asset> findByNameContainingIgnoreCaseOrAssetIdContainingIgnoreCase(String nameQuery, String assetIdQuery);
+    // Search by name (case-insensitive) OR by exact assetId parsed separately in service
+    List<Asset> findByNameContainingIgnoreCaseOrAssetId(String nameQuery, Long assetId);
     
     List<Asset> findByCategoryAndStatus(String category, AssetStatus status);
 
